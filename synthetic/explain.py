@@ -2,24 +2,24 @@ from __future__ import print_function
 import numpy as np
 import tensorflow as tf
 import pandas as pd
-import cPickle as pkl
+import _pickle as pkl
 from collections import defaultdict
 import re 
 from bs4 import BeautifulSoup 
 import sys
 import os
 import time
-from keras.callbacks import ModelCheckpoint    
-from keras.layers import Dense, Input, Flatten, Add, Multiply, Lambda
-from keras.layers.normalization import BatchNormalization
-from keras.models import Model, Sequential
-from keras import regularizers
-from keras import backend as K
-from keras.engine.topology import Layer 
+from tensorflow.python.keras.callbacks import ModelCheckpoint    
+from tensorflow.python.keras.layers import Dense, Input, Flatten, Add, Multiply, Lambda
+from tensorflow.python.keras.layers.normalization import BatchNormalization
+from tensorflow.python.keras.models import Model, Sequential
+from tensorflow.python.keras import regularizers
+from tensorflow.python.keras import backend as K
+from tensorflow.python.keras.layers import Layer 
 from make_data import generate_data
 import json
 import random
-from keras import optimizers
+from tensorflow.python.keras import optimizers
 
 BATCH_SIZE = 1000
 np.random.seed(0)
@@ -112,7 +112,7 @@ class Sample_Concrete(Layer):
 
 def L2X(datatype, train = True): 
 	x_train,y_train,x_val,y_val,datatype_val, input_shape = create_data(datatype, 
-		n = int(1e6))
+		n = 4)
 	 
 	st1 = time.time()
 	st2 = st1
@@ -164,7 +164,7 @@ def L2X(datatype, train = True):
 	pred_model = Model(model_input, samples)
 	pred_model.compile(loss=None,
 				  optimizer='rmsprop',
-				  metrics=[None]) 
+				  metrics=None) 
 
 	scores = pred_model.predict(x_val, verbose = 1, batch_size = BATCH_SIZE) 
 
@@ -181,6 +181,7 @@ if __name__ == '__main__':
 	parser.add_argument('--datatype', type = str, 
 		choices = ['orange_skin','XOR','nonlinear_additive','switch'], default = 'orange_skin')
 	parser.add_argument('--train', action='store_true')
+	parser.set_defaults(train=False)
 
 	args = parser.parse_args()
 
